@@ -1,30 +1,62 @@
-import pkg from "whatsapp-web.js";
-const {LocalAuth, Client} = pkg;
-import qrcode from "qrcode-terminal";
+const pkg = require("whatsapp-web.js");
+const qrcode = require("qrcode-terminal");
+const { ChatCompletion } = require("./Groq-client");
+const { LocalAuth, Client } = pkg;
+require("dotenv").config()
+
+const APP_NAME = process.env.NAME
 
 const whatsappClient = new Client({
   authStrategy: new LocalAuth(),
 });
 
-whatsappClient.on("qr", (qr) => qrcode.generate(qr, { small: true }));
-whatsappClient.on("ready", () => console.log("Client is ready!"));
+//whatsappClient.on("message", async (msg) => {
+//  try {
+//    if (msg.from != "status@broadcast") {
+//      const contact = await msg.getContact();
+//      console.log(contact, msg.body);
+//    }
+//  } catch (error) {
+//    console.log(error);
+//  }
+//});
 
 whatsappClient.on("message", async (msg) => {
-  try {
-    if (msg.from != "status@broadcast") {
-      const contact = await msg.getContact();
-      console.log(contact, msg.body);
-    } else {
+  if (msg.body.startsWith("!ai")) {
+    const replyMessage = msg.body.substring(4);
+    try {
+      msg.reply("loading..");
+      const response = await ChatCompletion(replyMessage);
+      msg.reply(response.choices[0]?.message?.content || "Error");
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        console.error("Error:", error.response.data.error.message);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
-  } catch (error) {
-    console.log(error);
   }
 });
 
-whatsappClient.on('message', msg => {
-    if (msg.body == '!ping') {
-        msg.reply('pong');
+whatsappClient.on("group_join", async (notification) => {
+  try {
+    const chat = await notification.getChat();
+
+    if (notification.type === "invite") {
+      for (const userId of notification.recipientIds) {
+        const contact = await whatsappClient.getContactById(userId);
+
+        if (contact) {
+          const message = `Hello @${contact.number}! Welcome to the ${APP_NAME}`;
+          await chat.sendMessage(message, {
+            mentions: [contact],
+          });
+        }
+      }
     }
+  } catch (error) {
+    console.error("Error handling group join:", error);
+  }
 });
 
-whatsappClient.initialize();
+module.exports = whatsappClient;
