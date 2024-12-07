@@ -8,4 +8,14 @@ name: app
 # (https://docs.platform.sh/languages/nodejs.html#supported-versions)
 # to find the supported versions for the 'nodejs' type.
 type: 'nodejs:22'
+variables:
+    env:
+        NODE_ENV: 'production'
+
+web:
+    commands:
+        start: npm run dev
+    locations:
+        "http": true
+        "https": true
 
