@@ -1,5 +1,6 @@
 const whatsappClient = require("../client/whatsapp-client");
 const { MessageMedia } = require('whatsapp-web.js');
+const processPhoneNumber = require('../utils/procces-number');
 
 async function SendMessage(req, res) {
   const { phoneNumber, message } = req.body;
@@ -11,8 +12,9 @@ async function SendMessage(req, res) {
   }
 
   try {
-    await whatsappClient.sendMessage(phoneNumber, message);
-    res.status;
+    const formattedPhoneNumber = processPhoneNumber(phoneNumber);
+    await whatsappClient.sendMessage(formattedPhoneNumber, message);
+    res.status(200).send({ message: "Message sent successfully" });
   } catch (err) {
     console.error("Error sending message:", err);
     res.status(500).send({ error: "Failed to send message" });
@@ -29,8 +31,9 @@ async function SendMedia(req, res) {
   }
 
   try {
+    const formattedPhoneNumber = processPhoneNumber(phoneNumber);
     const mediaFile = await MessageMedia.fromUrl(media);
-    await whatsappClient.sendMessage(phoneNumber, mediaFile, {
+    await whatsappClient.sendMessage(formattedPhoneNumber, mediaFile, {
       caption: message || "",
     });
     res.status(200).send({ message: "Media sent successfully" });
@@ -44,3 +47,4 @@ module.exports = {
   SendMessage,
   SendMedia,
 };
+
