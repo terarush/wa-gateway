@@ -59,4 +59,33 @@ whatsappClient.on("group_join", async (notification) => {
   }
 });
 
+//whatsappClient.on("group_join", async (notification) => {
+//  try {
+//    const chat = await notification.getChat();
+//
+//    if (notification.type === "invite") {
+//      for (const userId of notification.recipientIds) {
+//        const contact = await whatsappClient.getContactById(userId);
+//
+//        if (contact) {
+//          const imagePath = '/path/to/your/image.jpg'; // Provide the path to the image you want to send
+//          const message = `Hello @${contact.number}! Welcome to the group!`;
+//
+//          await chat.sendMessage(message, {
+//            mentions: [contact],
+//          });
+//
+//          // Sending an image after the message
+//          await chat.sendMessage(imagePath, {
+//            caption: 'Here is a welcome image!', // Optional caption
+//          });
+//        }
+//      }
+//    }
+//  } catch (error) {
+//    console.error("Error handling group join:", error);
+//  }
+//});
+//
+
 module.exports = whatsappClient;

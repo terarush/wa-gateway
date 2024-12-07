@@ -2,3 +2,4 @@ node_modules/
 wa_credentials/
 .wwebjs_cache/
 .wwebjs_auth/
+.env
