@@ -1,18 +1,18 @@
 const pkg = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 const { ChatCompletion } = require("./Groq-client");
-const { LocalAuth, Client } = pkg;
+const textToVoice = require("../utils/textToVoice");
+const { LocalAuth, Client, MessageMedia } = pkg;
 require("dotenv").config();
+const fs = require("fs");
+const {exec} = require("child_process")
 
 const whatsappClient = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
     headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
-    ],
-    defaultViewport: null
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    defaultViewport: null,
   },
   takeoverOnConflict: true,
 });
@@ -28,7 +28,9 @@ const whatsappClient = new Client({
 //  }
 //});
 
+// MESSAGE CLIENT
 whatsappClient.on("message", async (msg) => {
+  // CHAT AI LLAMA3.2
   if (msg.body.startsWith("!ai")) {
     const replyMessage = msg.body.substring(4).trim();
     try {
@@ -42,8 +44,29 @@ whatsappClient.on("message", async (msg) => {
       msg.reply("An error occurred while processing your request.");
     }
   }
+  // TEXT TO VOICE
+  if (msg.body.startsWith("!text-voice")) {
+    const text = msg.body.substring(12).trim();
+    if (!text) {
+      return msg.reply("Please provide the text to convert to voice.");
+    }
+
+    try {
+      const filePath = await textToVoice(text);
+      if (fs.existsSync(filePath)) {
+        const media = MessageMedia.fromFilePath(filePath);
+        await msg.reply(media);
+        fs.unlinkSync(filePath);
+      } else {
+        fs.unlinkSync(filePath);
+      }
+    } catch (error) {
+      msg.reply("An error occurred while converting text to voice.");
+    }
+  }
 });
 
+// JOIN NOTIFICATION FROM INVITE
 whatsappClient.on("group_join", async (notification) => {
   try {
     const chat = await notification.getChat();
