@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Gateway Docs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <header class="bg-green-600 text-white py-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-3xl font-bold">WhatsApp Gateway API Documentation</h1>
+            <p class="mt-2">Comprehensive guide to integrate and use the API.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto my-10 px-6">
+        <section class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">Overview</h2>
+            <p class="text-gray-700 leading-relaxed">
+                The WhatsApp Gateway API allows you to send text messages and media to WhatsApp numbers programmatically.
+                Below are the available endpoints and their usage instructions.
+            </p>
+        </section>
+
+        <section class="mt-8 bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">API Endpoints</h2>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-2">1. Send Message</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    This endpoint allows you to send a text message to a specific phone number.
+                </p>
+                <table class="table-auto w-full mt-4 text-left text-gray-700 border-collapse border border-gray-200">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="px-4 py-2 border border-gray-200">HTTP Method</th>
+                            <th class="px-4 py-2 border border-gray-200">Endpoint</th>
+                            <th class="px-4 py-2 border border-gray-200">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-4 py-2 border border-gray-200">POST</td>
+                            <td class="px-4 py-2 border border-gray-200">/send-message</td>
+                            <td class="px-4 py-2 border border-gray-200">Sends a text message.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mt-4 text-gray-700">
+                    <strong>Request Body:</strong>
+                </p>
+                <pre class="bg-gray-50 border border-gray-200 p-4 rounded text-sm">
+{
+  "phoneNumber": "string (required)",
+  "message": "string (required)"
+}
+                </pre>
+                <p class="mt-2 text-gray-700">
+                    <strong>Response:</strong> Returns a status message indicating success or failure.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold mb-2">2. Send Media</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    This endpoint allows you to send media (images, videos, etc.) to a specific phone number, with an optional text message.
+                </p>
+                <table class="table-auto w-full mt-4 text-left text-gray-700 border-collapse border border-gray-200">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="px-4 py-2 border border-gray-200">HTTP Method</th>
+                            <th class="px-4 py-2 border border-gray-200">Endpoint</th>
+                            <th class="px-4 py-2 border border-gray-200">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-4 py-2 border border-gray-200">POST</td>
+                            <td class="px-4 py-2 border border-gray-200">/send-media</td>
+                            <td class="px-4 py-2 border border-gray-200">Sends media with an optional caption.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mt-4 text-gray-700">
+                    <strong>Request Body:</strong>
+                </p>
+                <pre class="bg-gray-50 border border-gray-200 p-4 rounded text-sm">
+{
+  "phoneNumber": "string (required)",
+  "media": "string (required - URL to media)",
+  "message": "string (optional)"
+}
+                </pre>
+                <p class="mt-2 text-gray-700">
+                    <strong>Response:</strong> Returns a status message indicating success or failure.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; <%= new Date().getFullYear() %> WhatsApp Gateway. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
