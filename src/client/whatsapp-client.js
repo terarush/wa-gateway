@@ -2,12 +2,19 @@ const pkg = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 const { ChatCompletion } = require("./Groq-client");
 const { LocalAuth, Client } = pkg;
-require("dotenv").config()
-
-const APP_NAME = process.env.NAME
+require("dotenv").config();
 
 const whatsappClient = new Client({
   authStrategy: new LocalAuth(),
+  puppeteer: {
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+    ],
+    defaultViewport: null
+  },
+  takeoverOnConflict: true,
 });
 
 //whatsappClient.on("message", async (msg) => {
@@ -23,17 +30,16 @@ const whatsappClient = new Client({
 
 whatsappClient.on("message", async (msg) => {
   if (msg.body.startsWith("!ai")) {
-    const replyMessage = msg.body.substring(4);
+    const replyMessage = msg.body.substring(4).trim();
     try {
-      msg.reply("loading..");
       const response = await ChatCompletion(replyMessage);
-      msg.reply(response.choices[0]?.message?.content || "Error");
+
+      const content =
+        response.choices[0]?.message?.content || "Sorry, no response.";
+      msg.reply(content);
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.error) {
-        console.error("Error:", error.response.data.error.message);
-      } else {
-        console.error("Unexpected error:", error);
-      }
+      console.error("Error in ChatCompletion:", error);
+      msg.reply("An error occurred while processing your request.");
     }
   }
 });
@@ -58,34 +64,5 @@ whatsappClient.on("group_join", async (notification) => {
     console.error("Error handling group join:", error);
   }
 });
-
-//whatsappClient.on("group_join", async (notification) => {
-//  try {
-//    const chat = await notification.getChat();
-//
-//    if (notification.type === "invite") {
-//      for (const userId of notification.recipientIds) {
-//        const contact = await whatsappClient.getContactById(userId);
-//
-//        if (contact) {
-//          const imagePath = '/path/to/your/image.jpg'; // Provide the path to the image you want to send
-//          const message = `Hello @${contact.number}! Welcome to the group!`;
-//
-//          await chat.sendMessage(message, {
-//            mentions: [contact],
-//          });
-//
-//          // Sending an image after the message
-//          await chat.sendMessage(imagePath, {
-//            caption: 'Here is a welcome image!', // Optional caption
-//          });
-//        }
-//      }
-//    }
-//  } catch (error) {
-//    console.error("Error handling group join:", error);
-//  }
-//});
-//
 
 module.exports = whatsappClient;
