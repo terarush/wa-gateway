@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wa-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - CHROME_BIN=/usr/bin/chromium
+      - NODE_ENV=development
+    command: npm run dev
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    container_name: wa-redis
+    ports:
+      - "6379:6379"
+
+networks:
+  default:
+    external:
+      name: app_network
+
