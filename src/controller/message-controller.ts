@@ -6,11 +6,6 @@ import { processPhoneNumber } from "../utils/procces-number";
 export async function SendMessage(req: Request, res: Response): Promise<void> {
   const { phoneNumber, message } = req.body;
 
-  if (!phoneNumber || !message) {
-    res.status(400).send({ error: "Phone number and message are required." });
-    return;
-  }
-
   try {
     const formattedPhoneNumber = processPhoneNumber(phoneNumber);
     await whatsappClient.sendMessage(formattedPhoneNumber, message);
@@ -23,11 +18,6 @@ export async function SendMessage(req: Request, res: Response): Promise<void> {
 
 export async function SendMedia(req: Request, res: Response): Promise<void> {
   const { phoneNumber, media, message } = req.body;
-
-  if (!phoneNumber || !media) {
-    res.status(400).send({ error: "Phone number and media URL are required." });
-    return;
-  }
 
   try {
     const formattedPhoneNumber = processPhoneNumber(phoneNumber);

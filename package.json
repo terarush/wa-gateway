@@ -19,7 +19,8 @@
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "uuid": "^11.0.3",
-    "whatsapp-web.js": "^1.26.0"
+    "whatsapp-web.js": "^1.26.0",
+    "zod": "^3.24.1"
   },
   "keywords": [],
   "author": "",

@@ -5,6 +5,7 @@ import router from "./routes/routes";
 import whatsappClient from "./client/whatsapp-client";
 import qrcode from "qrcode-terminal";
 import { toDataURL } from "qrcode";
+import { errorMiddleware } from "./middleware/error.middleware";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
+app.use(errorMiddleware)
 app.use(router);
 
 let QRCodeURL: string | null = null;
@@ -33,14 +35,14 @@ whatsappClient.on("ready", () => {
 
 whatsappClient.initialize();
 
-app.get("/", (res: Response) => {
+app.get("/", (req: Request, res: Response) => {
   res.render("index", {
     title: "WhatsApp Gateway",
     message: "Welcome to WhatsApp Gateway!",
   });
 });
 
-app.get("/scan", async (res: Response) => {
+app.get("/scan", async (req: Request, res: Response) => {
   if (QRCodeURL) {
     res.render("scan", {
       qrimage: QRCodeURL,
