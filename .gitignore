@@ -1,5 +1,22 @@
+# Node.js dependencies
 node_modules/
+
+# WA credentials and cache
 wa_credentials/
 .wwebjs_cache/
 .wwebjs_auth/
+
+# Environment variables
 .env
+
+# Optional: If you're using TypeScript, you can also ignore the build directory
+/dist/
+
+# Optional: Ignore IDE/editor-specific files
+.vscode/
+.idea/
+
+# Optional: Ignore OS-specific files
+.DS_Store
+Thumbs.db
+

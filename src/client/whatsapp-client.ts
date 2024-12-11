@@ -28,7 +28,7 @@ whatsappClient.on("message", async (msg) => {
       const contactName = contact.pushname || "Unknown";
 
       const currentHour = new Date().getHours();
-      let greeting;
+      let greeting: any;
 
       if (currentHour >= 0 && currentHour < 12) {
         greeting = "Selamat Pagi";
