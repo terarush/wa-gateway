@@ -1,9 +1,9 @@
-const gTTS = require("gtts");
-const { v4: uuidv4 } = require("uuid");
-const fs = require("fs");
-const path = require("path");
+import gTTS from "gtts";
+import { v4 as uuidv4 } from "uuid";
+import fs from "fs";
+import path from "path";
 
-function textToVoice(text, lang = "id") {
+export function textToVoice(text: string, lang: string = "id"): Promise<string> {
   return new Promise((resolve, reject) => {
     const fileName = `${uuidv4()}.mp3`;
     const outputDir = path.join(__dirname, '../output');
@@ -16,7 +16,7 @@ function textToVoice(text, lang = "id") {
 
     const gtts = new gTTS(text, lang);
 
-    gtts.save(outputPath, function (err) {
+    gtts.save(outputPath, function (err: Error | null) {
       if (err) {
         reject(err);
         return;
@@ -25,6 +25,4 @@ function textToVoice(text, lang = "id") {
     });
   });
 }
-
-module.exports = textToVoice;
 

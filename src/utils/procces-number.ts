@@ -1,4 +1,4 @@
-function processPhoneNumber(phoneNumber) {
+export function processPhoneNumber(phoneNumber: string): string {
   let cleanedNumber = phoneNumber.replace(/\D/g, "");
 
   if (cleanedNumber.startsWith("0")) {
@@ -14,4 +14,3 @@ function processPhoneNumber(phoneNumber) {
   return `${cleanedNumber}@c.us`;
 }
 
-module.exports = processPhoneNumber;

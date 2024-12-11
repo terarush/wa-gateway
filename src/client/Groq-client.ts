@@ -1,11 +1,13 @@
-const Groq = require("groq-sdk");
-require("dotenv").config();
+import dotenv from "dotenv";
+import Groq from "groq-sdk";
+
+dotenv.config();
 
 const groq = new Groq({
-  apiKey: process.env.GROQ_TOKEN,
+  apiKey: process.env.GROQ_TOKEN!,
 });
 
-async function ChatCompletion(message) {
+export async function ChatCompletion(message: string): Promise<any> {
   return groq.chat.completions.create({
     messages: [
       {
@@ -27,4 +29,3 @@ async function ChatCompletion(message) {
   });
 }
 
-module.exports = { ChatCompletion };

@@ -1,14 +1,14 @@
-const whatsappClient = require("../client/whatsapp-client");
-const { MessageMedia } = require('whatsapp-web.js');
-const processPhoneNumber = require('../utils/procces-number');
+import { Request, Response } from "express";
+import whatsappClient from "../client/whatsapp-client";
+import { MessageMedia } from "whatsapp-web.js";
+import { processPhoneNumber } from "../utils/procces-number";
 
-async function SendMessage(req, res) {
+export async function SendMessage(req: Request, res: Response): Promise<void> {
   const { phoneNumber, message } = req.body;
 
   if (!phoneNumber || !message) {
-    return res
-      .status(400)
-      .send({ error: "Phone number and message are required." });
+    res.status(400).send({ error: "Phone number and message are required." });
+    return;
   }
 
   try {
@@ -21,13 +21,12 @@ async function SendMessage(req, res) {
   }
 }
 
-async function SendMedia(req, res) {
+export async function SendMedia(req: Request, res: Response): Promise<void> {
   const { phoneNumber, media, message } = req.body;
 
   if (!phoneNumber || !media) {
-    return res
-      .status(400)
-      .send({ error: "Phone number and media URL are required." });
+    res.status(400).send({ error: "Phone number and media URL are required." });
+    return;
   }
 
   try {
@@ -42,9 +41,4 @@ async function SendMedia(req, res) {
     res.status(500).send({ error: "Failed to send media" });
   }
 }
-
-module.exports = {
-  SendMessage,
-  SendMedia,
-};
 

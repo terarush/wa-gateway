@@ -1,10 +1,10 @@
-const dotenv = require("dotenv");
-const express = require("express");
-const cors = require("cors");
-const router = require("./routes/routes");
-const whatsappClient = require("./client/whatsapp-client");
-const qrcode = require("qrcode-terminal");
-const { toDataURL } = require("qrcode");
+import dotenv from "dotenv";
+import express, { Request, Response } from "express";
+import cors from "cors";
+import router from "./routes/routes";
+import whatsappClient from "./client/whatsapp-client";
+import qrcode from "qrcode-terminal";
+import { toDataURL } from "qrcode";
 
 dotenv.config();
 
@@ -17,28 +17,30 @@ app.set("view engine", "ejs");
 app.set("views", "./src/views");
 app.use(router);
 
-let QRCodeURL = null;
+let QRCodeURL: string | null = null;
 
-whatsappClient.on("qr", (qr) => {
-  toDataURL(qr).then((url) => {
+whatsappClient.on("qr", (qr: string) => {
+  toDataURL(qr).then((url: string) => {
     QRCodeURL = url;
   });
   qrcode.generate(qr, { small: true });
 });
+
 whatsappClient.on("ready", () => {
-  QRCodeURL = null
-  console.log("Client is ready!")
+  QRCodeURL = null;
+  console.log("Client is ready!");
 });
+
 whatsappClient.initialize();
 
-app.get("/", (req, res) => {
+app.get("/", (res: Response) => {
   res.render("index", {
     title: "WhatsApp Gateway",
     message: "Welcome to WhatsApp Gateway!",
   });
 });
 
-app.get("/scan", async (req, res) => {
+app.get("/scan", async (res: Response) => {
   if (QRCodeURL) {
     res.render("scan", {
       qrimage: QRCodeURL,
