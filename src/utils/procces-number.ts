@@ -13,4 +13,3 @@ export function processPhoneNumber(phoneNumber: string): string {
 
   return `${cleanedNumber}@c.us`;
 }
-
