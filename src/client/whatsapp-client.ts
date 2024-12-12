@@ -9,6 +9,8 @@ const { LocalAuth, Client, MessageMedia } = pkg;
 const whatsappClient = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
+    // if you use termux, uncomment this code!
+    //executablePath: '/data/data/com.termux/files/usr/bin/chromium-browser',
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     defaultViewport: null,
