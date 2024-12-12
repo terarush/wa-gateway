@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import cors from "cors";
 import router from "./routes/routes";
@@ -6,8 +5,7 @@ import whatsappClient from "./client/whatsapp-client";
 import qrcode from "qrcode-terminal";
 import { toDataURL } from "qrcode";
 import { errorMiddleware } from "./middleware/error.middleware";
-
-dotenv.config();
+import ENV from "./env";
 
 const app = express();
 
@@ -56,7 +54,7 @@ app.get("/scan", async (req: Request, res: Response) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = ENV.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

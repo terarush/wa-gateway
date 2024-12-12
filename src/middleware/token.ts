@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
+import ENV from "../env";
 
-dotenv.config();
-
-const SECRET_TOKEN = process.env.SECRET_TOKEN;
+const SECRET_TOKEN = ENV.SECRET_TOKEN;
 
 export async function TokenCheck(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {

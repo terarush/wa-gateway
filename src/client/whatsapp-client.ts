@@ -1,12 +1,10 @@
 import pkg from "whatsapp-web.js";
 import { ChatCompletion } from "./Groq-client";
 import { textToVoice } from "../utils/textToVoice";
-import dotenv from "dotenv";
 import fs from "fs";
+import ENV from "../env";
 
 const { LocalAuth, Client, MessageMedia } = pkg;
-
-dotenv.config();
 
 const whatsappClient = new Client({
   authStrategy: new LocalAuth(),
@@ -118,7 +116,7 @@ whatsappClient.on("group_join", async (notification) => {
         const contact = await whatsappClient.getContactById(userId);
 
         if (contact) {
-          const message = `Halo @${contact.number}! Selamat datang di ${process.env.APP_NAME}`;
+          const message = `Halo @${contact.number}! Selamat datang di ${ENV.NAME}`;
           await chat.sendMessage(message, {
             mentions: [contact.number],
           });

@@ -1,10 +1,8 @@
-import dotenv from "dotenv";
 import Groq from "groq-sdk";
-
-dotenv.config();
+import ENV from "../env";
 
 const groq = new Groq({
-  apiKey: process.env.GROQ_TOKEN!,
+  apiKey: ENV.GROQ_TOKEN,
 });
 
 export async function ChatCompletion(message: string): Promise<any> {
