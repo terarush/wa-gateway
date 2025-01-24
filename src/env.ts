@@ -8,6 +8,7 @@ const ENV = {
   NAME: process.env.NAME || 'MEGUMIN',
   GROQ_TOKEN: process.env.GROQ_TOKEN,
   NODE_ENV: process.env.NODE_ENV || 'DEVELOPMENT',
+  GEMINI_TOKEN: process.env.GEMINI_TOKEN || ""
 }
 
 export default ENV;

@@ -6,6 +6,7 @@ import qrcode from "qrcode-terminal";
 import { toDataURL } from "qrcode";
 import { errorMiddleware } from "./middleware/error.middleware";
 import ENV from "./env";
+import { changeProfilePicture } from "./handler/change-profile";
 
 const app = express();
 
@@ -29,6 +30,9 @@ whatsappClient.on("qr", (qr: string) => {
 whatsappClient.on("ready", () => {
   QRCodeURL = null;
   console.log("Client is ready!");
+  setInterval(async () => {
+    await changeProfilePicture()
+  }, 8000)
 });
 
 whatsappClient.initialize();
@@ -55,7 +59,7 @@ app.get("/scan", async (req: Request, res: Response) => {
 });
 
 const PORT = ENV.PORT;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+//app.listen(PORT, () => {
+//  console.log(`Server is running on http://localhost:${PORT}`);
+//});
 
