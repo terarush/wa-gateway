@@ -1,4 +1,3 @@
-# Each route describes how an incoming URL is going to be processed by Platform.sh.
 "https://www.{default}/":
     type: upstream
     upstream: "app:http"
